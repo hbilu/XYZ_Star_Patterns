@@ -51,13 +51,16 @@ def check_word():
 
 def check_number():
     while True:
-        number = int(input("Enter an odd number"))
-        if number < 3:
-            print("the number is greater than 3")
-        elif number%2 == 0:
-            print("the number is an even number")
-        else:
-            break
+        try:
+            number = int(input("Enter an odd number"))
+            if number < 3:
+                print("The number is less than 3")
+            elif number % 2 == 0:
+                print("The number is an even number")
+            else:
+                break
+        except ValueError:
+            print("This is not a number. Try again!")
     return number
 
 def select_axis():
