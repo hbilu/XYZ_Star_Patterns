@@ -2,33 +2,38 @@
 Printing horizontally or vertically one or more X, Y, or Z characters as star-shaped
 according to the pre-entered user inputs.
 The user should enter the followings:
-- an odd number ( which is equal to or greater than 3) indicating the size of the X, Y, or Z.
+- an even/odd number (which is equal to or greater than 3) indicating the size of the X, Y, or Z.
 - one or more X, Y, or Z characters
 - horizontal or vertical axis selection
 
-Horizontal output for odd-number = 5    Horizontal output for odd-number = 3
-*       * *       * * * * * *           *   * *   * * * *
-  *   *     *   *         *               *     *     *
-    *         *         *               *   *   *   * * *
-  *   *       *       *
-*       *     *     * * * * *
+Output Examples:
+Horizontal output for odd-number = 5  Horizontal output for odd-number = 3  Horizontal output for even-number = 6
+*       * *       * * * * * *         *   * *   * * * *                     *         * *         * * * * * * *
+  *   *     *   *         *             *     *     *                         *     *     *     *           *
+    *         *         *             *   *   *   * * *                         * *         * *           *
+  *   *       *       *                                                         * *         * *         *
+*       *     *     * * * * *                                                 *     *       * *       *
+                                                                            *         *     * *     * * * * * *
 
-Vertical output for odd-number = 5      Vertical output for odd-number = 3
-*       *                               *   *
-  *   *                                   *
-    *                                   *   *
-  *   *                                 *   *
-*       *                                 *
-*       *                                 *
-  *   *                                 * * *
-    *                                     *
-    *                                   * * *
-    *
-* * * * *
-      *
-    *
-  *
-* * * * *
+Vertical output for odd-number = 5    Vertical output for odd-number = 3    Vertical output for even-number = 6
+*       *                             *   *                                 *         *
+  *   *                                 *                                     *     *
+    *                                 *   *                                     * *
+  *   *                               *   *                                     * *
+*       *                               *                                     *     *
+*       *                               *                                   *         *
+  *   *                               * * *                                 *         *
+    *                                   *                                     *     *
+    *                                 * * *                                     * *
+    *                                                                           * *
+* * * * *                                                                       * *
+      *                                                                         * *
+    *                                                                       * * * * * *
+  *                                                                                 *
+* * * * *                                                                         *
+                                                                                *
+                                                                              *
+                                                                            * * * * * *
 """
 
 import numpy as np
@@ -52,11 +57,9 @@ def check_word():
 def check_number():
     while True:
         try:
-            number = int(input("Enter an odd number"))
+            number = int(input("Enter an even/odd number greater than 3"))
             if number < 3:
                 print("The number is less than 3")
-            elif number % 2 == 0:
-                print("The number is an even number")
             else:
                 break
         except ValueError:
@@ -75,11 +78,11 @@ def select_axis():
             break
     return axis.upper()
 
-def x_pattern(odd_number):
-    x_pat = np.zeros((odd_number, odd_number), 'U1')
-    for row in range(0, odd_number, 1):
-        for col in range(0, odd_number, 1):
-            if row + col == odd_number - 1:
+def x_pattern(number):
+    x_pat = np.zeros((number, number), 'U1')
+    for row in range(0, number, 1):
+        for col in range(0, number, 1):
+            if row + col == number - 1:
                 x_pat[row][col] = "*"
             elif row == col:
                 x_pat[row][col] = "*"
@@ -87,40 +90,55 @@ def x_pattern(odd_number):
                 x_pat[row][col] = " "
     return x_pat
 
-def y_pattern(odd_number):
-    y_pat = np.zeros((odd_number, odd_number), 'U1')
-    middle = int((odd_number - 1) / 2)
-    for row in range(0, odd_number, 1):
-        for col in range(0, odd_number, 1):
-            if col == middle and row >= middle:
-                y_pat[row][col] = "*"
-            elif col == odd_number - 1 - row and row < middle:
-                y_pat[row][col] = "*"
-            elif row == col and row < middle:
-                y_pat[row][col] = "*"
-            else:
-                y_pat[row][col] = " "
-    return y_pat
+def y_pattern(number):
+    y_pat = np.zeros((number, number), 'U1')
+    middle = int((number - 1) / 2)
+    if number % 2 == 1: # if it is an odd number
+        for row in range(0, number, 1):
+            for col in range(0, number, 1):
+                if col == middle and row >= middle:
+                    y_pat[row][col] = "*"
+                elif col == number - 1 - row and row < middle:
+                    y_pat[row][col] = "*"
+                elif row == col and row < middle:
+                    y_pat[row][col] = "*"
+                else:
+                    y_pat[row][col] = " "
+        return y_pat
+    else: # if it is an even number
+        for row in range(0, number, 1):
+            for col in range(0, number, 1):
+                if col == middle and row >= middle:
+                    y_pat[row][col] = "*"
+                elif col == middle+1 and row >= middle:
+                    y_pat[row][col] = "*"
+                elif col == number - 1 - row and row < middle:
+                    y_pat[row][col] = "*"
+                elif row == col and row < middle:
+                    y_pat[row][col] = "*"
+                else:
+                    y_pat[row][col] = " "
+        return y_pat
 
-def z_pattern(odd_number):
-    z_pat = np.zeros((odd_number, odd_number), 'U1')
-    for row in range(0, odd_number, 1):
-        for col in range(0, odd_number, 1):
-            if row == 0 or row == odd_number - 1 or row + col == odd_number - 1:
+def z_pattern(number):
+    z_pat = np.zeros((number, number), 'U1')
+    for row in range(0, number, 1):
+        for col in range(0, number, 1):
+            if row == 0 or row == number - 1 or row + col == number - 1:
                 z_pat[row][col] = "*"
             else:
                 z_pat[row][col] = " "
     return z_pat
 
-def print_HV(chr_list, odd_number, axis):
+def print_HV(chr_list, number, axis):
     str_lists = [[] for i in range(len(chr_list))]
     for index in range(0, len(chr_list), 1):
         if chr_list[index] == "X" or chr_list[index] == "x":
-            str_lists[index] = x_pattern(odd_number)
+            str_lists[index] = x_pattern(number)
         elif chr_list[index] == "Y" or chr_list[index] == "y":
-            str_lists[index] = y_pattern(odd_number)
+            str_lists[index] = y_pattern(number)
         else:
-            str_lists[index] = z_pattern(odd_number)
+            str_lists[index] = z_pattern(number)
     if axis == "H":
         j = 0
         for i in range(len((str_lists[j]))):
@@ -129,7 +147,7 @@ def print_HV(chr_list, odd_number, axis):
                     print(str_lists[j][i][k], end=' ')
             print()
     else:  # if axis=="V"
-        strlists_2d_V = np.reshape(str_lists, (odd_number * len(chr_list), odd_number))
+        strlists_2d_V = np.reshape(str_lists, (number * len(chr_list), number))
         for l in strlists_2d_V:
             print(*l)
 
