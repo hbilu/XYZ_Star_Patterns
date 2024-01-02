@@ -104,7 +104,6 @@ def y_pattern(number):
                     y_pat[row][col] = "*"
                 else:
                     y_pat[row][col] = " "
-        return y_pat
     else: # if it is an even number
         for row in range(0, number, 1):
             for col in range(0, number, 1):
@@ -118,7 +117,7 @@ def y_pattern(number):
                     y_pat[row][col] = "*"
                 else:
                     y_pat[row][col] = " "
-        return y_pat
+    return y_pat
 
 def z_pattern(number):
     z_pat = np.zeros((number, number), 'U1')
